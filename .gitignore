@@ -1,9 +1,9 @@
 #Arquivos de especificacao
-.pdf
+*.pdf
 
 #Arquivos do C++
 
-.out
-.exe
+*.out
+*.exe
 
 
