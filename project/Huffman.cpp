@@ -4,13 +4,6 @@
 
 HuffmanNode::HuffmanNode(const char &ch_, const int freq_) : character(ch_), frequency(freq_), left(NULL), right(NULL), parent(NULL){};
 
-HuffmanNode::HuffmanNode()
-{
-    left = right = parent = NULL;
-    character = 0;
-    frequency = 0;
-}
-
 std::ostream &operator<<(std::ostream &out, const HuffmanNode &node)
 {
     out << " '" << node.character << "':" << node.frequency << " ";
@@ -23,7 +16,7 @@ bool HuffmanNode::operator<(const HuffmanNode &other)
     {
         return true;
     }
-    else if (this->frequency = other.frequency && this->character < other.character)
+    if (this->frequency = other.frequency && this->character < other.character)
     {
         return true;
     }
@@ -37,7 +30,41 @@ bool HuffmanNode::operator>(const HuffmanNode &other)
     {
         return true;
     }
-    else if (this->frequency == other.frequency && this->character > other.character)
+    if (this->frequency == other.frequency && this->character > other.character)
+    {
+        return true;
+    }
+    return false;
+}
+
+//! Implementacao Huffman Node Ptr
+
+HuffNodePtr::HuffNodePtr(HuffmanNode *ptr, int frequency)
+{
+    huffPtr = ptr;
+    freq = -frequency; // As frequencias sao negativas pois estamos ordenando ao contrario os structs
+}
+
+bool HuffNodePtr::operator<(const HuffNodePtr &other)
+{
+    if (this->freq < other.freq)
+    {
+        return true;
+    }
+    if (this->freq == other.freq && this->huffPtr->character < other.huffPtr->character)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool HuffNodePtr::operator>(const HuffNodePtr &other)
+{
+    if (this->freq > other.freq)
+    {
+        return true;
+    }
+    if (this->freq == other.freq && this->huffPtr->character > other.huffPtr->character)
     {
         return true;
     }
@@ -55,21 +82,69 @@ HuffmanTree::HuffmanTree(int freqs_[256])
 
 void HuffmanTree::criaHuffmanTree()
 {
-    MyPriorityQueue<HuffmanNode> PQ;
+    MyPriorityQueue<HuffNodePtr> PQ;
 
     montaPriorityQueue(PQ); // Passamos a lista por referencia para que ela seja alterada dentro da funcao
-    
+    montaArvore(PQ);
+    criaMapa();
 }
 
-void HuffmanTree::montaPriorityQueue(MyPriorityQueue<HuffmanNode> &pq)
+void HuffmanTree::montaPriorityQueue(MyPriorityQueue<HuffNodePtr> &pq)
 {
     for (int i = 0; i < 256; i++)
     {
         if (freqs[i] > 0)
         {
-            HuffmanNode *nodoPtr = new HuffmanNode(i, -freqs[i]); // Como a lista deve ser crescente, as frequencias sao negativas
-            pq.push(*nodoPtr);
+            HuffNodePtr nodePtr(new HuffmanNode(i, freqs[i]), freqs[i]);
+            pq.push(nodePtr);
         }
+    }
+}
+
+void HuffmanTree::montaArvore(MyPriorityQueue<HuffNodePtr> &pq)
+{
+    while (pq.size() > 1)
+    {
+        HuffNodePtr smallerNode = pq.top();
+        pq.pop();
+        HuffNodePtr greaterNode = pq.top();
+        pq.pop();
+
+        HuffmanNode *father = new HuffmanNode(0, smallerNode.huffPtr->frequency + greaterNode.huffPtr->frequency); //Criamos um novo nodo com char = 0
+
+        father->left = smallerNode.huffPtr;  //Colocamos o menor filho na esquerda
+        father->right = greaterNode.huffPtr; //Colocamos o maior filho na direita
+
+        //Atribuimos os pais
+        smallerNode.huffPtr->parent = father;
+        greaterNode.huffPtr->parent = father;
+
+        HuffNodePtr auxPtr(father, father->frequency);
+        pq.push(auxPtr);
+    }
+    root = pq.top().huffPtr; // a root sera o nodo que sobrou
+    imprimeBFS();
+}
+
+void HuffmanTree::criaMapa()
+{
+    std::string codigo = "";
+    criaMapa(codigo, root);
+}
+
+void HuffmanTree::criaMapa(std::string code, HuffmanNode * nodo)
+{
+    if (!nodo->left && !nodo->right) // Se nao tem filhos se trata de uma folha
+    {
+        oMapa[nodo->character] = code;
+    }
+    if (nodo->left)
+    {
+        criaMapa(code+"0", nodo->left);
+    }
+    if (nodo->right)
+    {
+        criaMapa(code+"1", nodo->right);
     }
 }
 
@@ -86,44 +161,7 @@ void HuffmanTree::deleteHuffmanNodes(HuffmanNode *nodo)
     }
     deleteHuffmanNodes(nodo->left);
     deleteHuffmanNodes(nodo->right);
-    delete root;
-}
-
-void HuffmanTree::checkTree() const
-{
-    checkTree(root);
-}
-
-void HuffmanTree::checkTree(const HuffmanNode *nodo) const
-{
-    if (!nodo)
-    {
-        return;
-    }
-    if (nodo == this->root)
-    {
-        assert(nodo->parent == NULL);
-    }
-    if (nodo->left) // se tivermos nodo da esquerda
-    {
-        if (nodo->left->frequency > nodo->frequency) // Se o da esquerda for maior, teremos um erro e vamos mostrar os envolvidos
-        {
-            cerr << nodo->left << " " << nodo << endl;
-        }
-        assert(nodo->left->frequency <= nodo->frequency); // Podemos ter frequencias iguais, mas os char serao diferentes
-        assert(nodo->left->parent == nodo);
-        checkTree(nodo->left);
-    }
-    if (nodo->right)
-    {
-        if (nodo->right->frequency < nodo->frequency)
-        {
-            cerr << nodo->right << " " << nodo << endl;
-        }
-        assert(nodo->right->frequency >= nodo->frequency); // Podemos ter frequencias iguais, mas os char serao diferentes
-        assert(nodo->right->parent == nodo);
-        checkTree(nodo->left);
-    }
+    delete nodo;
 }
 
 void HuffmanTree::imprimeBFS() const
@@ -148,7 +186,7 @@ void HuffmanTree::imprimeBFS() const
         {
             HuffmanNode *p = q.front();
             q.pop();
-            cout << p << " "; // temos a saida de um nodo com sobreescrita
+            cout << *p << " "; // temos a saida de um nodo com sobreescrita
 
             //Enquanto printamos um nodo, colocamos seus filhos em outra lista
             if (p->left)
@@ -176,6 +214,6 @@ void HuffmanTree::imprimeDFS_in(const HuffmanNode *nodo) const
         return;
     }
     imprimeDFS_in(nodo->left);
-    cout << nodo;
+    cout << *nodo;
     imprimeDFS_in(nodo->right);
 }

@@ -21,3 +21,58 @@ int main(int argc, char const *argv[])
 
     return 0;
 }
+
+// while (PQ.size() > 0)
+// {
+//     cout << *PQ.top().huffPtr;
+//     PQ.pop();
+// }
+
+//void HuffmanTree::checkTree(const HuffmanNode *nodo) const
+// {
+//     if (!nodo)
+//     {
+//         return;
+//     }
+//     if (nodo == this->root)
+//     {
+//         assert(nodo->parent == NULL);
+//     }
+//     if (nodo->left) // se tivermos nodo da esquerda
+//     {
+//         if (nodo->left->frequency > nodo->frequency) // Se o da esquerda for maior, teremos um erro e vamos mostrar os envolvidos
+//         {
+//             cerr << nodo->left << " " << nodo << endl;
+//         }
+//         assert(nodo->left->frequency <= nodo->frequency); // Podemos ter frequencias iguais, mas os char serao diferentes
+//         assert(nodo->left->parent == nodo);
+//         checkTree(nodo->left);
+//     }
+//     if (nodo->right)
+//     {
+//         if (nodo->right->frequency < nodo->frequency)
+//         {
+//             cerr << nodo->right << " " << nodo << endl;
+//         }
+//         assert(nodo->right->frequency >= nodo->frequency); // Podemos ter frequencias iguais, mas os char serao diferentes
+//         assert(nodo->right->parent == nodo);
+//         checkTree(nodo->left);
+//     }
+// }
+
+//Funcao que verifica a integridade da arvore que tuddo esta de acordo
+// void checkTree() const;
+
+// void HuffmanTree::checkTree() const
+// {
+//     checkTree(root);
+// }
+
+
+
+//  typename MyMap<char,string>::iterator it = oMapa.begin();
+
+    // for ( it ; it != oMapa.end(); it++)
+    // {
+    //     cout << (*it).first << " " << (*it).second << std::endl; 
+    // }
