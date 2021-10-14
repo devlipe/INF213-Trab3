@@ -76,3 +76,56 @@ int main(int argc, char const *argv[])
     // {
     //     cout << (*it).first << " " << (*it).second << std::endl; 
     // }
+
+
+
+    // std::string str = "teste de vetor";
+
+    //     int freqs[256] = {0};
+    //     for (int i = 0; i < str.length(); i++) {
+    //         freqs[str[i]]++;
+    //     }
+    //     for (int i = 0; i < 256; i++) {
+    //         if (freqs[i] > 0){
+    //             char c = i;
+    //             cout << c << " " << freqs[i] << endl;
+    //         }
+    //     }
+    //     HuffmanTree arvore(freqs);
+
+    // cout << "\n\n IMPRIMINDO VETOR CHAR\n";
+    // for (int i = 0; i < vetorChar.size(); i++)
+    // {
+    //     cout << vetorChar[i];
+    // }
+    // cout << "\n\n IMPRIMINDO VETOR BOOL\n";
+    // for (int i = 0; i < vetorBool.size(); i++)
+    // {
+    //     if (i % 8 == 0)
+    //     {
+    //         cout << " \n";
+    //     }
+
+    //     cout << vetorBool[i];
+    // }
+
+
+    //  cout << "\nIMPRIMINDO A ARVORE\n";
+    // arvore.imprimeBFS();
+    // cout << "\n\n IMPRIMINDO O MAPA\n";
+    // arvore.imprimeMapa();
+    // cout << "\n\n IMPRIMINDO VETOR CHAR\n";
+    // for (int i = 0; i < vetorChar.size(); i++)
+    // {
+    //     cout << vetorChar[i] << " ";
+    // }
+    // cout << "\n\n IMPRIMINDO VETOR BOOL\n";
+    // for (int i = 0; i < vetorBool.size(); i++)
+    // {
+    //     cout << vetorBool[i] << " ";
+    // }
+    // cout << "\n\n IMPRIMINDO VETOR FREQS\n";
+    // for (int i = 0; i < 256; i++)
+    // {
+    //     cout << frequencias[i] << " ";
+    // }

@@ -3,12 +3,12 @@
 
 void geraVetorDeBooleans(int numeroDeBits, MyVec<bool> &vetorBool, ifstream &arquivoComprimido)
 {
-    char byte;
+    unsigned char byte;
     int bitsExcedentes = 0;
     int k = 0;
     for (k; k < numeroDeBits; k = k + 8)
     {
-        arquivoComprimido.read(&byte, sizeof(char));
+        arquivoComprimido.read(reinterpret_cast<char*>(&byte), sizeof(char));
 
         for (int i = 0; i < 8; i++)
         {
@@ -25,13 +25,15 @@ void geraVetorDeBooleans(int numeroDeBits, MyVec<bool> &vetorBool, ifstream &arq
 
 void descomprimeArquivo(ifstream &arquivoComprimido, ofstream &arquivoDescomprimido)
 {
-    MyVec<char> vetorChar;
+    MyVec<unsigned char> vetorChar;
     MyVec<bool> vetorBool;
     int frequencias[256] = {0};
     int numeroDeBits = 0;
 
-    arquivoComprimido.read(reinterpret_cast<char *>(&numeroDeBits), sizeof(int));
-    arquivoComprimido.read(reinterpret_cast<char *>(frequencias), 256 * sizeof(int));
+    arquivoComprimido.read(reinterpret_cast< char *>(&numeroDeBits), sizeof(int));
+    arquivoComprimido.read(reinterpret_cast< char *>(frequencias), 256 * sizeof(int));
+
+    geraVetorDeBooleans(numeroDeBits,vetorBool,arquivoComprimido);
 
     HuffmanTree arvore(frequencias);
 
@@ -39,14 +41,14 @@ void descomprimeArquivo(ifstream &arquivoComprimido, ofstream &arquivoDescomprim
 
     for (int i = 0; i < vetorChar.size(); i++)
     {
-        arquivoDescomprimido << vetorChar[i]; // Escrevemos no arquivo de saida o vetor de char
+        arquivoDescomprimido << vetorChar[i]; // Escrevemos no arquivo de saida o vetor de unsigned char
     }
 }
 
-void geraFrequenciasEVetorDeChar(ifstream &in, MyVec<char> &vetorChar, int frequencias[256])
+void geraFrequenciasEVetorDeChar(ifstream &in, MyVec<unsigned char> &vetorChar, int frequencias[256])
 {
-    char c;
-    while (in.read(&c, sizeof(char))) // Lemos ate acabar o arquivo
+    unsigned char c;
+    while (in.read(reinterpret_cast<char*>(&c), sizeof(char))) // Lemos ate acabar o arquivo
     {
         frequencias[c]++;
         vetorChar.push_back(c);
@@ -56,7 +58,7 @@ void geraFrequenciasEVetorDeChar(ifstream &in, MyVec<char> &vetorChar, int frequ
 void gravaArquivoComprimido(const MyVec<bool> &vetorBool, ofstream &arquivoComprimido)
 {
     int bitAtual = 0;
-    char byte = 0;
+    unsigned char byte = 0;
 
     for (int i = 0; i < vetorBool.size(); i++)
     {
@@ -70,14 +72,14 @@ void gravaArquivoComprimido(const MyVec<bool> &vetorBool, ofstream &arquivoCompr
 
         if (bitAtual == 8)
         {
-            arquivoComprimido.write(&byte, sizeof(char));
+            arquivoComprimido.write(reinterpret_cast<char*>(&byte), sizeof( char));
             byte = 0;
             bitAtual = 0;
         }
     }
     if (bitAtual) // Se tivermos bits registrados no byte mesmo apos a saida do for, temos que coloca-los no aquivo compactado
     {
-        arquivoComprimido.write(&byte, sizeof(char));
+        arquivoComprimido.write(reinterpret_cast<char*>(&byte), sizeof( char));
         byte = 0;
         bitAtual = 0;
     }
@@ -86,7 +88,7 @@ void gravaArquivoComprimido(const MyVec<bool> &vetorBool, ofstream &arquivoCompr
 void comprimeArquivo(ifstream &arquivoDescomprimido, ofstream &arquivoComprimido)
 {
     int frequencias[256] = {0};
-    MyVec<char> vetorChar;
+    MyVec<unsigned char> vetorChar;
     MyVec<bool> vetorBool;
 
     geraFrequenciasEVetorDeChar(arquivoDescomprimido, vetorChar, frequencias);
@@ -97,8 +99,8 @@ void comprimeArquivo(ifstream &arquivoDescomprimido, ofstream &arquivoComprimido
 
     int numeroBits = vetorBool.size();
 
-    arquivoComprimido.write(reinterpret_cast<char *>(&numeroBits), sizeof(int));
-    arquivoComprimido.write(reinterpret_cast<char *>(frequencias), 256 * sizeof(int)); // Gravamos as frequencias para que seja possivel descompactar o arquivo
+    arquivoComprimido.write(reinterpret_cast< char *>(&numeroBits), sizeof(int));
+    arquivoComprimido.write(reinterpret_cast< char *>(frequencias), 256 * sizeof(int)); // Gravamos as frequencias para que seja possivel descompactar o arquivo
 
     gravaArquivoComprimido(vetorBool, arquivoComprimido);
 }
@@ -112,7 +114,7 @@ int main(int argc, char const *argv[])
         exit(1);
     }
 
-    char medotoExec = tolower(*argv[1]); // Metodo de execucao
+    unsigned char medotoExec = tolower(*argv[1]); // Metodo de execucao
     string pathEntrada = argv[2];        // Arquvo de entrada
     string pathSaida = argv[3];          // Arquivo de saida
 

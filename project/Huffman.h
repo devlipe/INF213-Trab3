@@ -8,13 +8,13 @@
 class HuffmanNode
 {
 public:
-    HuffmanNode(const char &ch_, const int freq_);
+    HuffmanNode(const unsigned char &ch_, const int freq_);
 
     HuffmanNode *left, *right;
     HuffmanNode *parent;
 
-    // Guarada o char da letra
-    char character;
+    // Guarada o unsigned char da letra
+    unsigned char character;
     // Guarda o numero de vezer que o character aparece
     int frequency;
 
@@ -57,7 +57,7 @@ private:
     HuffmanNode *root;
     int size;
     int *freqs;
-    MyMap<char, std::string> oMapa;
+    MyMap<unsigned char, std::string> oMapa;
 
     //* Funcoes de uso da classe
 
@@ -73,8 +73,8 @@ private:
     void montaArvore(MyPriorityQueue<HuffNodePtr> &pq);
     //Funcao que deleta a arvore depois de um determidado nodo
     void deleteHuffmanNodes(HuffmanNode *nodo);
-    //Funcao que recupera um codigo do mapa dado um char
-    string recuperaCodigo(const char c) const;
+    //Funcao que recupera um codigo do mapa dado um unsigned char
+    string recuperaCodigo(const unsigned char c) const;
     //Funcao que grava os bits em um vetor de bool com base em um codigo dado
     void gravaBitsVetorBool(const string &codigo, MyVec<bool> &out) const;
     //Funcao que verifica se o nodo e uma folha
@@ -92,9 +92,9 @@ public:
     //* Funcoes de uso do programa
 
     //Funcao que comprime um arquivo myvec e coloca o resultado em um vetor de bool
-    void comprimir(MyVec<bool> &out, const MyVec<char> &in) const;
-    //Funcao que dado um vetor de booleanos consegue descomprimir em um vetor de char
-    void descomprimir(MyVec<char> &out, const MyVec<bool> &in) const;
+    void comprimir(MyVec<bool> &out, const MyVec<unsigned char> &in) const;
+    //Funcao que dado um vetor de booleanos consegue descomprimir em um vetor de unsigned char
+    void descomprimir(MyVec<unsigned char> &out, const MyVec<bool> &in) const;
 
     //* Funcoes de debugger
 

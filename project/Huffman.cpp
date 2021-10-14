@@ -2,7 +2,7 @@
 
 //! Implementacao Huffman Node
 
-HuffmanNode::HuffmanNode(const char &ch_, const int freq_) : character(ch_), frequency(freq_), left(NULL), right(NULL), parent(NULL){};
+HuffmanNode::HuffmanNode(const unsigned char &ch_, const int freq_) : character(ch_), frequency(freq_), left(NULL), right(NULL), parent(NULL){};
 
 std::ostream &operator<<(std::ostream &out, const HuffmanNode &node)
 {
@@ -109,7 +109,7 @@ void HuffmanTree::montaArvore(MyPriorityQueue<HuffNodePtr> &pq)
 		HuffNodePtr greaterNode = pq.top();
 		pq.pop();
 
-		HuffmanNode *father = new HuffmanNode(0, smallerNode.huffPtr->frequency + greaterNode.huffPtr->frequency); // Criamos um novo nodo com char = 0
+		HuffmanNode *father = new HuffmanNode(0, smallerNode.huffPtr->frequency + greaterNode.huffPtr->frequency); // Criamos um novo nodo com unsigned char = 0
 
 		father->left = smallerNode.huffPtr;	 // Colocamos o menor filho na esquerda
 		father->right = greaterNode.huffPtr; // Colocamos o maior filho na direita
@@ -154,7 +154,7 @@ void HuffmanTree::criaMapa(std::string code, HuffmanNode *nodo)
 	}
 	if (nodo->right)
 	{
-		criaMapa(code + "1", nodo->right);
+		criaMapa(code + "1", nodo->right); // Adicionamos 1 se fpr a direita
 	}
 }
 
@@ -233,20 +233,20 @@ void HuffmanTree::imprimeDFS_in(const HuffmanNode *nodo) const
 	imprimeDFS_in(nodo->right);
 }
 
-void HuffmanTree::comprimir(MyVec<bool> &out, const MyVec<char> &in) const
+void HuffmanTree::comprimir(MyVec<bool> &out, const MyVec<unsigned char> &in) const
 {
 	for (int i = 0; i < in.size(); i++)
 	{
-		char c = in[i]; // Pegamos um caracter do arquivo
+		unsigned char c = in[i]; // Pegamos um caracter do arquivo
 		string codigo = recuperaCodigo(c);
 
 		gravaBitsVetorBool(codigo, out);
 	}
 }
 
-string HuffmanTree::recuperaCodigo(const char c) const
+string HuffmanTree::recuperaCodigo(const unsigned char c) const
 {
-	typename MyMap<char, std::string>::iterator it = oMapa.find(c);
+	typename MyMap<unsigned char, std::string>::iterator it = oMapa.find(c);
 	return (*it).second; // Descobrimos o codigo relacionado com um caracter
 }
 
@@ -254,17 +254,17 @@ void HuffmanTree::gravaBitsVetorBool(const string &codigo, MyVec<bool> &out) con
 {
 	for (int j = 0; j < codigo.length(); j++) // Como o tamanho do codigo e variavel usamos um for pelo tamanho dele
 	{
-		char bit = codigo[j];
+		unsigned char bit = codigo[j];
 
 		out.push_back((bit == '1'));
 	}
 }
 
-void HuffmanTree::descomprimir(MyVec<char> &out, const MyVec<bool> &in) const
+void HuffmanTree::descomprimir(MyVec<unsigned char> &out, const MyVec<bool> &in) const
 {
 	HuffmanNode *andarilho = root;
 
-	if (andarilho && eFolha(andarilho)) // Caso tivermos um arquivo com somente um char repetido varias vezes, temos que tratar esse caso
+	if (andarilho && eFolha(andarilho)) // Caso tivermos um arquivo com somente um unsigned char repetido varias vezes, temos que tratar esse caso
 	{									// Tratamos tambem o caso da arvore vazia, que se for null, nao entrara no if
 		for (int i = 0; i < andarilho->frequency; i++)
 		{
@@ -295,7 +295,7 @@ void HuffmanTree::descomprimir(MyVec<char> &out, const MyVec<bool> &in) const
 
 void HuffmanTree::imprimeMapa()
 {
-	typename MyMap<char, string>::iterator it = oMapa.begin();
+	typename MyMap<unsigned char, string>::iterator it = oMapa.begin();
 
 	for (it; it != oMapa.end(); it++)
 	{

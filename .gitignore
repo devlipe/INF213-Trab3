@@ -1,5 +1,6 @@
 #Arquivos de especificacao
 *.pdf
+*.txt
 
 #Arquivos do C++
 

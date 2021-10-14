@@ -3,6 +3,10 @@
         "array": "cpp",
         "optional": "cpp",
         "tuple": "cpp",
-        "type_traits": "cpp"
+        "type_traits": "cpp",
+        "*.tcc": "cpp",
+        "iosfwd": "cpp",
+        "iostream": "cpp",
+        "functional": "cpp"
     }
 }
