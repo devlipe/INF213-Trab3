@@ -80,6 +80,52 @@ HuffmanTree::HuffmanTree(int freqs_[256])
 	criaHuffmanTree();
 }
 
+HuffmanTree::HuffmanTree(const HuffmanTree &other)
+{
+	create();
+	*this = other;
+}
+
+void HuffmanTree::create()
+{
+	root = nullptr;
+	size = 0;
+	freqs = nullptr;
+}
+
+HuffmanTree &HuffmanTree::operator=(const HuffmanTree &other)
+{
+	if (this == &other)
+	{
+		return *this;
+	}
+	deleteHuffmanNodes(this->root);
+	create();
+
+	this->freqs = other.freqs;
+	this->size = other.size;
+	this->oMapa = other.oMapa;
+
+	root = copyTree(other.root);
+
+	return *this;
+}
+
+HuffmanNode *HuffmanTree::copyTree(HuffmanNode *toCopyRoot)
+{
+	if (!toCopyRoot)
+	{
+		return NULL;
+	}
+	
+	HuffmanNode * newRoot = new HuffmanNode(toCopyRoot->character, toCopyRoot->frequency);
+	newRoot->left = copyTree(toCopyRoot->left);
+	newRoot->right = copyTree(toCopyRoot->right);
+
+	return newRoot;
+
+}
+
 void HuffmanTree::criaHuffmanTree()
 {
 	MyPriorityQueue<HuffNodePtr> PQ;

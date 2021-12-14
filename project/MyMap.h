@@ -183,7 +183,7 @@ Node<K, V> *MyMap<K, V>::copyNodes(const Node<K, V> *root, Node<K, V> *parent) c
 	{ //caso base
 		return NULL;
 	}
-	Node<K, V> *ans = new Node<K, V>(root->keyValue);
+	Node<K, V> *ans = new Node<K, V>(root->keyValue.first, root->keyValue.second);
 	ans->parent = parent;
 	ans->left = copyNodes(root->left, ans);
 	ans->right = copyNodes(root->right, ans);

@@ -79,6 +79,10 @@ private:
     void gravaBitsVetorBool(const string &codigo, MyVec<bool> &out) const;
     //Funcao que verifica se o nodo e uma folha
     bool eFolha(HuffmanNode *nodo) const;
+    //Funcao que cria uma arvore de huffman vazia
+    void create(); 
+    // Funcao que copia os nodos de uma arvore e retorna a root da arvore nova
+    HuffmanNode * copyTree(HuffmanNode * toCopyRoot);
 
     //* Funcoes de debugger
     void imprimeDFS_in(const HuffmanNode *nodo) const;
@@ -87,7 +91,12 @@ public:
     //* Construtor e destrutor
 
     HuffmanTree(int freqs[256]);
+    HuffmanTree(const HuffmanTree &other);
     ~HuffmanTree();
+
+    //* Operador de copia
+    HuffmanTree &operator=(const HuffmanTree &other);
+
 
     //* Funcoes de uso do programa
 
